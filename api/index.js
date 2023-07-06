@@ -1,7 +1,11 @@
-const express = require("express");
+import express from 'express';
+import dotenv from 'dotenv';
+import db from './db/db.js';
 
-require("dotenv").config();
+dotenv.config()
 const app = express();
+
+db.connect();
 
 app.get('/helloworld', (req, res) => {
 	res.json('Hello World!');
