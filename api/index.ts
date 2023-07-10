@@ -39,27 +39,6 @@ app.get("/get-all-recipes", async (req, res) => {
   }
 });
 
-app.get("/get-random-recipe", async (req, res) => {
-	try {
-		const recipeIdsArray = await db.select().from(recipes);
-		const recipeIds = recipeIdsArray.map((row) => row.id);
-		const randomIndex = Math.floor(Math.random() * recipeIdsArray.length);
-		const randomRecipeId = recipeIds[randomIndex % recipeIds.length];
-	  const recipe = await db
-		.select()
-		.from(recipes)
-		.where(sql`${recipes.id} = ${randomRecipeId}`);
-	  if (recipe) {
-		res.status(200).json(recipe);
-	  } else {
-		res.status(404).json({ message: "Recipe not found!" });
-	  }
-	} catch (error) {
-	  console.log(error);
-	  res.status(500).json({ message: "Error fetching recipe!" });
-	}
-  });
-
 app.get("/recipes/:title", async (req, res) => {
   const { title } = req.params;
   try {
@@ -96,18 +75,6 @@ app.get("/recipes/:id", async (req, res) => {
   }
 });
 
-app.get("/get-all-recipe-ids", async (req, res) => {
-	try {
-		const queryResult = await db.select().from(recipes);
-    	const recipeIds = queryResult.map((row) => row.id);
-		res.status(200).json(recipeIds);
-		return recipeIds
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: "Error fetching recipe IDs!" });
-	}
-});
-
 app.post("/post-recipe", async (req, res) => {
   const { title, ingredients, instructions, times, image } = req.body;
   try {
@@ -126,6 +93,27 @@ app.post("/post-recipe", async (req, res) => {
     res.status(500).json({ message: "Error inserting recipe" });
   }
 });
+
+app.get("/get-random-recipe", async (req, res) => {
+	try {
+		const recipeIdsArray = await db.select().from(recipes);
+		const recipeIds = recipeIdsArray.map((row) => row.id);
+		const randomIndex = Math.floor(Math.random() * recipeIdsArray.length);
+		const randomRecipeId = recipeIds[randomIndex % recipeIds.length];
+	  const recipe = await db
+		.select()
+		.from(recipes)
+		.where(sql`${recipes.id} = ${randomRecipeId}`);
+	  if (recipe) {
+		res.status(200).json(recipe);
+	  } else {
+		res.status(404).json({ message: "Recipe not found!" });
+	  }
+	} catch (error) {
+	  console.log(error);
+	  res.status(500).json({ message: "Error fetching recipe!" });
+	}
+  });
 
 app.listen(process.env.PORT, (err) => {
   console.log(`The server is running on http://localhost:${process.env.PORT}`);
