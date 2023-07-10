@@ -75,25 +75,6 @@ app.get("/recipes/:id", async (req, res) => {
   }
 });
 
-app.post("/post-recipe", async (req, res) => {
-  const { title, ingredients, instructions, times, image } = req.body;
-  try {
-    console.log("Inserting...!");
-    await db.insert(recipes).values({
-      title: title,
-      ingredients: ingredients,
-      instructions: instructions,
-      times: times,
-      image: image,
-    });
-    console.log("Insert successful!");
-    res.status(200).json({ message: "Recipe inserted successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error inserting recipe" });
-  }
-});
-
 app.get("/get-random-recipe", async (req, res) => {
 	try {
 		const recipeIdsArray = await db.select().from(recipes);
@@ -114,6 +95,25 @@ app.get("/get-random-recipe", async (req, res) => {
 	  res.status(500).json({ message: "Error fetching recipe!" });
 	}
   });
+
+app.post("/post-recipe", async (req, res) => {
+  const { title, ingredients, instructions, times, image } = req.body;
+  try {
+    console.log("Inserting...!");
+    await db.insert(recipes).values({
+      title: title,
+      ingredients: ingredients,
+      instructions: instructions,
+      times: times,
+      image: image,
+    });
+    console.log("Insert successful!");
+    res.status(200).json({ message: "Recipe inserted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error inserting recipe" });
+  }
+});
 
 app.listen(process.env.PORT, (err) => {
   console.log(`The server is running on http://localhost:${process.env.PORT}`);
