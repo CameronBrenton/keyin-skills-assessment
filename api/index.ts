@@ -8,8 +8,6 @@ import { drizzle, PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { eq, sql } from "drizzle-orm";
 import postgres from "postgres";
 
-import { getAllRecipeIds } from './recipes/recipes';
-
 const client = postgres();
 const db: PostgresJsDatabase = drizzle(client);
 
@@ -106,7 +104,7 @@ app.get("/get-all-recipe-ids", async (req, res) => {
 		return recipeIds
 	} catch (error) {
 		console.log(error);
-		// res.status(500).json({ message: "Error fetching recipe IDs!" });
+		res.status(500).json({ message: "Error fetching recipe IDs!" });
 	}
 });
 

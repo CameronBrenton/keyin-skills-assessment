@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   getRecipeList,
   getRecipeByTitle,
@@ -13,7 +13,6 @@ export default function IndexPage() {
   const [searchResult, setSearchResult] = useState([]);
   const [randomRecipe, setRandomRecipe] = useState(null);
 
-  const queryClient = useQueryClient();
 
   const {
     data: recipes,
